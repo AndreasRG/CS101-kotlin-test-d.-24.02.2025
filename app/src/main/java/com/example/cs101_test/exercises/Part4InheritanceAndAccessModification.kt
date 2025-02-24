@@ -10,7 +10,32 @@ object Part4InheritanceAndAccessModification {
     // Create 2 classes (WashingMachine and Refrigerator) that extend the Appliance class
     //      and add a method to show/print their unique features e.g. has a quick wash feature (showFeatures).
     //      The showFeatures method must print something and not be blank, but you can choose what you want it to print!
+    open class Appliance constructor(
+        var brand:String,
+        var powerConsumption:Double,
+        var isOn:Boolean = false
+    ) {
+        fun turnOn() {
+            isOn = true
+        }
+        fun turnOff() {
+            isOn = false
+        }
+        override fun toString() :String {
+            return "[brand=$brand, powerConsumption=$powerConsumption, isOn=$isOn]"
+        }
+    }
 
+    class WashingMachine constructor(brand:String, powerConsumption:Double, isOn:Boolean = false) :Appliance(brand, powerConsumption, isOn) {
+        fun showFeatures() {
+            println("Features of washing machine: It washes your clothes!")
+        }
+    }
+    class Refrigerator constructor(brand:String, powerConsumption:Double, isOn:Boolean = false) :Appliance(brand, powerConsumption, isOn) {
+        fun showFeatures() {
+            println("Features of refrigerator: It cools your food!")
+        }
+    }
 
     // ---------------------- EXERCISE 2
     // Create a base class called Employee with properties: name, position, and salary
@@ -19,7 +44,31 @@ object Part4InheritanceAndAccessModification {
     // Implement the method work() for all classes, which prints a message indicating the type of work the employee is doing
     // E.g. an Employee.work() should print one thing and Developer.work() another
     // The work() method must print something and not be blank, but you can choose what you want it to print!
+    open class Employee constructor(
+        var name:String,
+        var position:String,
+        var salary:Double
+    ) {
+        open fun work() {
+            println("Working as a $position.")
+        }
+    }
 
+    class Manager constructor(name:String, position:String, salary:Double, var department:String) : Employee(name, position, salary) {
+        override fun work() {
+            println("Manages subjects")
+        }
+    }
+    class Developer constructor(name:String, position:String, salary:Double, var programmingLanguage:String) : Employee(name, position, salary) {
+        override fun work() {
+            println("Writes code")
+        }
+    }
+    class Intern constructor(name:String, position:String, salary:Double, var school: String) :Employee(name, position, salary) {
+        override fun work() {
+            println("Does slave work for partners")
+        }
+    }
 
     // ---------------------- EXERCISE 3
     // Create a class named Course to represent course information
@@ -38,6 +87,22 @@ object Part4InheritanceAndAccessModification {
     //             field = if (value in 0..150) value else 0
     //         }
     // }
+    class Course constructor(
+        var courseName:String,
+        var instructor:String
+    ) {
+        var credits:Int = 1
+            set(value) {
+                field = if (value in 1..5) value else throw IllegalArgumentException("Credits must be between 1 and 5")
+            }
+
+        val courseDuration:Int
+            get() = credits * 15
+
+        override fun toString():String {
+            return "Course(courseName='$courseName', instructor='$instructor', credits=$credits, courseDuration=$courseDuration hours)"
+        }
+    }
 
 
     // ---------------------- EXERCISE 4
@@ -46,6 +111,20 @@ object Part4InheritanceAndAccessModification {
     // To make calculateFitnessLevel easy to implement, just make it return an Int between 0 and 100 - you choose how to calculate it!
     // The class should have a public field fitnessLevel which uses the private function to return a result.
     // The setter for fitnessLevel should be private
+    class Athlete constructor(
+        var id:Int,
+        var name:String
+    ) {
+        private fun calculateFitnessLevel(): Int {
+            return (Math.random() * 100).toInt()
+        }
 
+        var fitnessLevel: Int = calculateFitnessLevel()
+            private set
+
+        override fun toString(): String {
+            return "Athlete(id=$id, name=$name, fitnessLevel=$fitnessLevel)"
+        }
+    }
 
 }
